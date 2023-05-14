@@ -1,30 +1,101 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="app">
+    <form @submit.prevent class="form">
+      <label>
+        title
+        <input
+            :value="titleValue"
+            @input="titleValue = $event.target.value"
+            type="text"
+            class="input">
+      </label>
+      <label>
+        description
+        <input
+            :value="descriptionValue"
+            @input="descriptionValue = $event.target.value"
+            type="text"
+            class="input">
+      </label>
+    </form>
+
+    <ul>
+      <li class="post" v-for="post in posts">
+        <p>
+          <b>Name:</b>: {{ post.title }}
+        </p>
+        <p>
+          <b>Description:</b>: {{ post.description }}
+        </p>
+      </li>
+    </ul>
+
+    <button
+        @click="addNewPost"
+        :disabled="!titleValue.length || !descriptionValue.length"
+        class="btn">Add new post
+    </button>
+  </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      titleValue: '',
+      descriptionValue: '',
+      posts: []
+    }
+  },
+  methods: {
+    addNewPost() {
+      const newPost = {id: Date.now(), title: this.titleValue, description: this.descriptionValue}
+      this.posts.push(newPost)
+      this.titleValue = ''
+      this.descriptionValue = ''
+    }
+  }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-nav {
-  padding: 30px;
+li {
+  list-style: none;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.app {
+  padding: 15px;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.post {
+  border: 1px solid orange;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.form {
+  margin-bottom: 15px;
+}
+
+.input {
+  display: block;
+  border: 1px solid orange;
+  padding: 5px 15px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.btn {
+  background-color: transparent;
+  padding: 5px 15px;
+  display: block;
+  margin-left: auto;
+  border: 1px solid orange;
 }
 </style>
