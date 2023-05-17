@@ -1,10 +1,18 @@
 <template>
   <div class="app">
-    <my-button @click="showModal">create a post</my-button>
-
     <my-modal v-model:show="isShowModal">
-      <form @createPost="createNewPost"/>
+      <Form @createPost="createNewPost"/>
     </my-modal>
+
+    <div style="display: flex; justify-content: space-between">
+      <my-button @click="showModal">create a post</my-button>
+
+      <my-select
+          v-model="selectedSort"
+          :options="selectedOptions"
+      />
+
+    </div>
 
     <posts :posts="posts" @remove="removePost" v-if="!isLoading"/>
 
@@ -17,9 +25,11 @@ import Posts from '@/components/Posts';
 import Form from '@/components/Form';
 import MyModal from "@/components/UI/MyModal";
 import axios from 'axios';
+import MySelect from "@/components/UI/MySelect";
 
 export default {
   components: {
+    MySelect,
     MyModal,
     Posts, Form
   },
@@ -28,6 +38,11 @@ export default {
       posts: [],
       isShowModal: false,
       isLoading: false,
+      selectedSort: '',
+      selectedOptions: [
+        {value: 'title', name: 'Name'},
+        {value: 'body', name: 'Body'},
+      ],
     }
   },
   methods: {
@@ -51,10 +66,15 @@ export default {
       } finally {
         this.isLoading = false
       }
-    }
+    },
   },
   mounted() {
     this.fetchPosts()
+  },
+  watch: {
+    selectedSort(newSelected) {
+      this.posts.sort((a, b) => a[newSelected].localeCompare(b[newSelected]))
+    }
   }
 }
 </script>

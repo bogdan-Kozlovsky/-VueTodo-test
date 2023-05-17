@@ -20,7 +20,6 @@
 <script>
 
 export default {
-  name: 'form',
   data() {
     return {
       post: {
