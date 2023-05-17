@@ -4,17 +4,18 @@
       <Form @createPost="createNewPost"/>
     </my-modal>
 
-    <div style="display: flex; justify-content: space-between">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
       <my-button @click="showModal">create a post</my-button>
 
       <my-select
           v-model="selectedSort"
           :options="selectedOptions"
       />
-
     </div>
 
-    <posts :posts="posts" @remove="removePost" v-if="!isLoading"/>
+    <my-input v-model="searchTerm" placeholder="Пошук постів"/>
+
+    <posts :posts="filteredPosts" @remove="removePost" v-if="!isLoading"/>
 
     <h1 v-else>Loading</h1>
   </div>
@@ -26,9 +27,11 @@ import Form from '@/components/Form';
 import MyModal from "@/components/UI/MyModal";
 import axios from 'axios';
 import MySelect from "@/components/UI/MySelect";
+import MyInput from "@/components/UI/MyInput";
 
 export default {
   components: {
+    MyInput,
     MySelect,
     MyModal,
     Posts, Form
@@ -43,6 +46,7 @@ export default {
         {value: 'title', name: 'Name'},
         {value: 'body', name: 'Body'},
       ],
+      searchTerm: '',
     }
   },
   methods: {
@@ -70,6 +74,13 @@ export default {
   },
   mounted() {
     this.fetchPosts()
+  },
+  computed: {
+    filteredPosts() {
+      return this.posts.filter(post =>
+          post.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
   },
   watch: {
     selectedSort(newSelected) {
