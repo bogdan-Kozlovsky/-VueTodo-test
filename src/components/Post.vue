@@ -2,23 +2,21 @@
   <li class="post">
     <div>
       <p>
-        <b>Name:</b>: {{ post.titleValue }}
+        <b>Name:</b>: {{ post.title }}
       </p>
       <p>
-        <b>Description:</b>: {{ post.descriptionValue }}
+        <b>Description:</b>: {{ post.body }}
       </p>
     </div>
 
-    <my-button>Delete</my-button>
+    <my-button @click="$emit('remove', post)">Delete</my-button>
   </li>
 </template>
 
 <script>
-import MyButton from '@/components/UI/MyButton';
 
 export default {
-  components: {MyButton},
-
+  name: 'post',
   props: {
     post: {
       type: Object,

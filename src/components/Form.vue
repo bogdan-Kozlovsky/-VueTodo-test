@@ -2,15 +2,15 @@
   <form @submit.prevent class="form">
     <label>
       title
-      <my-input v-model="post.titleValue"/>
+      <my-input v-model="post.title"/>
     </label>
     <label>
       description
-      <my-input v-model="post.descriptionValue"/>
+      <my-input v-model="post.body"/>
     </label>
 
     <my-button @click="createPost"
-               :disabled="!post.titleValue.length || !post.descriptionValue.length">
+               :disabled="!post.title.length || !post.body.length">
       Add new post
     </my-button>
   </form>
@@ -20,11 +20,12 @@
 <script>
 
 export default {
+  name: 'form',
   data() {
     return {
       post: {
-        titleValue: '',
-        descriptionValue: '',
+        title: '',
+        body: '',
       }
     }
   },
@@ -33,8 +34,8 @@ export default {
       this.post.id = Date.now();
       this.$emit('createPost', this.post);
       this.post = {
-        titleValue: '',
-        descriptionValue: '',
+        title: '',
+        body: '',
       }
     }
   }
@@ -42,10 +43,6 @@ export default {
 </script>
 
 <style scoped>
-.form {
-  margin-bottom: 15px;
-}
-
 .form > button {
   margin-left: auto;
 }
